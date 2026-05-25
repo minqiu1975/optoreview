@@ -55,7 +55,7 @@ export default function Navbar() {
             {/* Logo image */}
             <div className="relative w-8 h-8 flex items-center justify-center transition-transform duration-300 group-hover:scale-110">
               <img
-                src="/images/logo.png"
+                src="./images/logo.png"
                 alt="OptoReview"
                 className="w-8 h-8 object-contain"
               />
@@ -126,7 +126,7 @@ export default function Navbar() {
             </button>
             {/* Logo in mobile menu */}
             <div className="flex items-center gap-2 mb-4">
-              <img src="/images/logo.png" alt="OptoReview" className="w-10 h-10 object-contain" />
+              <img src="./images/logo.png" alt="OptoReview" className="w-10 h-10 object-contain" />
               <span className="font-display text-2xl font-bold" style={{ color: 'var(--color-text-primary)' }}>
                 Opto<span style={{ color: 'var(--color-primary)' }}>Review</span>
               </span>
