@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Menu, X, ArrowDown } from 'lucide-react';
+import { Menu, X, Sparkles } from 'lucide-react';
 
 const navLinks = [
   { label: '工作流程', href: '#workflow' },
@@ -38,25 +38,34 @@ export default function Navbar() {
         transition={{ duration: 0.5, ease: [0.16, 1, 0.3, 1] as [number, number, number, number], delay: 0.2 }}
         className="fixed top-0 left-0 right-0 z-50 h-16"
         style={{
-          background: scrolled ? 'rgba(247, 244, 240, 0.92)' : 'transparent',
-          backdropFilter: scrolled ? 'blur(12px)' : 'none',
-          borderBottom: scrolled ? '1px solid var(--color-border)' : '1px solid transparent',
-          transition: 'background 0.3s cubic-bezier(0.4, 0, 0.2, 1), border-bottom 0.3s cubic-bezier(0.4, 0, 0.2, 1), backdrop-filter 0.3s',
+          background: scrolled ? 'rgba(247, 244, 240, 0.85)' : 'transparent',
+          backdropFilter: scrolled ? 'blur(20px) saturate(1.2)' : 'none',
+          WebkitBackdropFilter: scrolled ? 'blur(20px) saturate(1.2)' : 'none',
+          borderBottom: scrolled ? '1px solid rgba(224, 221, 216, 0.6)' : '1px solid transparent',
+          transition: 'background 0.4s cubic-bezier(0.4, 0, 0.2, 1), border-bottom 0.4s cubic-bezier(0.4, 0, 0.2, 1), backdrop-filter 0.4s',
+          boxShadow: scrolled ? '0 1px 20px rgba(0,0,0,0.04)' : 'none',
         }}
       >
         <div className="max-w-[1440px] mx-auto h-full flex items-center justify-between px-6 md:px-12">
           {/* Logo */}
           <button
             onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
-            className="flex items-center gap-2.5 focus:outline-none focus-visible:ring-2 focus-visible:ring-[var(--color-primary)] focus-visible:ring-offset-2 rounded-lg"
+            className="flex items-center gap-2.5 focus:outline-none focus-visible:ring-2 focus-visible:ring-[var(--color-primary)] focus-visible:ring-offset-2 rounded-lg group"
           >
-            {/* Lens SVG icon */}
-            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="var(--color-primary)" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
-              <circle cx="12" cy="12" r="4" />
-              <path d="M12 2v4M12 18v4M4.93 4.93l2.83 2.83M16.24 16.24l2.83 2.83M2 12h4M18 12h4M4.93 19.07l2.83-2.83M16.24 7.76l2.83-2.83" />
-            </svg>
-            <span className="font-display text-[22px] font-bold" style={{ color: 'var(--color-text-primary)' }}>
-              OptoReview
+            {/* Logo image */}
+            <div className="relative w-8 h-8 flex items-center justify-center transition-transform duration-300 group-hover:scale-110">
+              <img
+                src="/images/logo.png"
+                alt="OptoReview"
+                className="w-8 h-8 object-contain"
+              />
+              {/* Subtle glow on hover */}
+              <div className="absolute inset-0 rounded-full opacity-0 group-hover:opacity-100 transition-opacity duration-300"
+                style={{ boxShadow: '0 0 12px rgba(14,107,94,0.25)' }}
+              />
+            </div>
+            <span className="font-display text-[22px] font-bold transition-colors duration-200" style={{ color: 'var(--color-text-primary)' }}>
+              Opto<span style={{ color: 'var(--color-primary)' }}>Review</span>
             </span>
           </button>
 
@@ -72,26 +81,24 @@ export default function Navbar() {
                 onMouseLeave={(e) => { (e.target as HTMLElement).style.color = 'var(--color-text-secondary)'; }}
               >
                 {link.label}
-                <span className="absolute -bottom-1 left-0 w-0 h-0.5 bg-[var(--color-primary)] transition-all duration-200 group-hover:w-full" />
+                <span className="absolute -bottom-1 left-0 w-0 h-0.5 bg-[var(--color-primary)] transition-all duration-300 ease-out group-hover:w-full rounded-full" />
               </button>
             ))}
             <button
               onClick={scrollToApp}
-              className="flex items-center gap-1.5 text-sm font-medium text-white px-5 py-2 rounded-lg transition-all duration-200 hover:-translate-y-0.5 focus:outline-none focus-visible:ring-2 focus-visible:ring-[var(--color-primary)] focus-visible:ring-offset-2"
-              style={{ background: 'var(--color-primary)' }}
-              onMouseEnter={(e) => { (e.currentTarget as HTMLElement).style.background = 'var(--color-primary-hover)'; }}
-              onMouseLeave={(e) => { (e.currentTarget as HTMLElement).style.background = 'var(--color-primary)'; }}
+              className="btn-premium flex items-center gap-1.5 text-sm font-medium text-white px-5 py-2.5 rounded-lg transition-all duration-300 hover:-translate-y-0.5 focus:outline-none focus-visible:ring-2 focus-visible:ring-[var(--color-primary)] focus-visible:ring-offset-2"
             >
-              <ArrowDown size={16} />
+              <Sparkles size={14} />
               开始分析
             </button>
           </div>
 
           {/* Mobile hamburger */}
           <button
-            className="md:hidden p-2 focus:outline-none"
+            className="md:hidden p-2 focus:outline-none transition-colors duration-200 rounded-lg"
             onClick={() => setMobileOpen(!mobileOpen)}
             aria-label="Toggle menu"
+            style={{ color: 'var(--color-text-primary)' }}
           >
             {mobileOpen ? <X size={24} /> : <Menu size={24} />}
           </button>
@@ -107,15 +114,23 @@ export default function Navbar() {
             exit={{ opacity: 0 }}
             transition={{ duration: 0.3 }}
             className="fixed inset-0 z-[60] flex flex-col items-center justify-center gap-8"
-            style={{ background: 'rgba(247, 244, 240, 0.98)', backdropFilter: 'blur(20px)' }}
+            style={{ background: 'rgba(247, 244, 240, 0.98)', backdropFilter: 'blur(24px)' }}
           >
             <button
-              className="absolute top-4 right-4 p-2 focus:outline-none"
+              className="absolute top-4 right-4 p-2 focus:outline-none rounded-lg transition-colors duration-200"
               onClick={() => setMobileOpen(false)}
               aria-label="Close menu"
+              style={{ color: 'var(--color-text-primary)' }}
             >
               <X size={24} />
             </button>
+            {/* Logo in mobile menu */}
+            <div className="flex items-center gap-2 mb-4">
+              <img src="/images/logo.png" alt="OptoReview" className="w-10 h-10 object-contain" />
+              <span className="font-display text-2xl font-bold" style={{ color: 'var(--color-text-primary)' }}>
+                Opto<span style={{ color: 'var(--color-primary)' }}>Review</span>
+              </span>
+            </div>
             {navLinks.map((link, i) => (
               <motion.button
                 key={link.href}
@@ -124,7 +139,7 @@ export default function Navbar() {
                 exit={{ opacity: 0, y: 20 }}
                 transition={{ delay: i * 0.08, duration: 0.3 }}
                 onClick={() => scrollTo(link.href)}
-                className="text-[32px] font-medium focus:outline-none"
+                className="text-[28px] font-medium focus:outline-none transition-colors duration-200"
                 style={{ color: 'var(--color-text-primary)' }}
               >
                 {link.label}
@@ -136,9 +151,9 @@ export default function Navbar() {
               exit={{ opacity: 0, y: 20 }}
               transition={{ delay: 0.24, duration: 0.3 }}
               onClick={scrollToApp}
-              className="text-[32px] font-medium px-8 py-3 rounded-lg text-white focus:outline-none"
-              style={{ background: 'var(--color-primary)' }}
+              className="btn-premium text-[20px] font-medium px-8 py-3.5 rounded-lg text-white focus:outline-none flex items-center gap-2"
             >
+              <Sparkles size={18} />
               开始分析
             </motion.button>
           </motion.div>

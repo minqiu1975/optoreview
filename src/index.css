@@ -11,6 +11,7 @@
     --color-primary: #0E6B5E;
     --color-primary-hover: #0A5248;
     --color-primary-light: #E8F3F1;
+    --color-primary-glow: rgba(14, 107, 94, 0.15);
     --color-text-primary: #1A1A1A;
     --color-text-secondary: #5C5C5C;
     --color-text-muted: #9E9E9E;
@@ -82,7 +83,139 @@
 }
 
 @layer components {
-  /* Markdown report styles */
+  /* ============ Enhanced UI Effects ============ */
+
+  /* Glow effect for cards on hover */
+  .glow-card {
+    position: relative;
+    overflow: hidden;
+  }
+  .glow-card::before {
+    content: '';
+    position: absolute;
+    top: -50%;
+    left: -50%;
+    width: 200%;
+    height: 200%;
+    background: radial-gradient(circle at var(--mouse-x, 50%) var(--mouse-y, 50%), var(--color-primary-glow) 0%, transparent 50%);
+    opacity: 0;
+    transition: opacity 0.3s ease;
+    pointer-events: none;
+    z-index: 0;
+  }
+  .glow-card:hover::before {
+    opacity: 1;
+  }
+
+  /* Gradient border effect */
+  .gradient-border {
+    position: relative;
+    background: var(--color-bg-panel);
+    border-radius: 16px;
+  }
+  .gradient-border::before {
+    content: '';
+    position: absolute;
+    inset: -1px;
+    border-radius: 17px;
+    background: linear-gradient(135deg, var(--color-primary) 0%, transparent 50%, var(--color-primary) 100%);
+    opacity: 0;
+    transition: opacity 0.3s ease;
+    z-index: -1;
+  }
+  .gradient-border:hover::before {
+    opacity: 0.3;
+  }
+
+  /* Shimmer loading effect */
+  .skeleton-shimmer {
+    background: linear-gradient(90deg, #f0f0f0 25%, #e0e0e0 50%, #f0f0f0 75%);
+    background-size: 200% 100%;
+    animation: shimmer 1.5s ease-in-out infinite;
+  }
+
+  /* CTA Button premium gradient */
+  .btn-premium {
+    position: relative;
+    background: linear-gradient(180deg, #0E6B5E 0%, #0A5248 100%);
+    box-shadow: 0 8px 24px rgba(0,0,0,0.10), 0 0 0 1px rgba(14,107,94,0.2);
+    overflow: hidden;
+  }
+  .btn-premium::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(180deg, rgba(255,255,255,0.1) 0%, transparent 50%);
+    pointer-events: none;
+  }
+  .btn-premium:hover {
+    box-shadow: 0 12px 32px rgba(0,0,0,0.15), 0 0 0 1px rgba(14,107,94,0.3), 0 0 20px rgba(14,107,94,0.1);
+  }
+
+  /* Section title decoration */
+  .section-title-accent {
+    position: relative;
+    display: inline-block;
+  }
+  .section-title-accent::after {
+    content: '';
+    position: absolute;
+    bottom: -4px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 40px;
+    height: 3px;
+    background: linear-gradient(90deg, transparent, var(--color-primary), transparent);
+    border-radius: 2px;
+  }
+
+  /* Step connector line with glow */
+  .step-connector {
+    position: relative;
+  }
+  .step-connector::after {
+    content: '';
+    position: absolute;
+    top: 50%;
+    right: -24px;
+    width: 48px;
+    height: 2px;
+    background: linear-gradient(90deg, var(--color-border), var(--color-primary), var(--color-border));
+    transform: translateY(-50%);
+    opacity: 0.4;
+  }
+
+  /* Floating particles canvas overlay */
+  .particles-overlay {
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    overflow: hidden;
+  }
+
+  /* Light ray decoration */
+  .light-ray {
+    position: absolute;
+    width: 1px;
+    background: linear-gradient(180deg, transparent, var(--color-primary-glow), transparent);
+    pointer-events: none;
+  }
+
+  /* Number badge with pulse ring */
+  .badge-pulse {
+    position: relative;
+  }
+  .badge-pulse::after {
+    content: '';
+    position: absolute;
+    inset: -4px;
+    border-radius: 50%;
+    border: 2px solid var(--color-primary);
+    opacity: 0;
+    animation: badgePulse 2s ease-out infinite;
+  }
+
+  /* ============ Markdown report styles ============ */
   .markdown-report {
     font-size: 15px;
     line-height: 1.8;
@@ -255,11 +388,30 @@
     border-top: 1px solid var(--color-border);
     margin: 24px 0;
   }
+}
 
-  /* Skeleton shimmer */
-  .skeleton-shimmer {
-    background: linear-gradient(90deg, #f0f0f0 25%, #e0e0e0 50%, #f0f0f0 75%);
-    background-size: 200% 100%;
-    animation: shimmer 1.5s ease-in-out infinite;
+@layer utilities {
+  /* Text gradient utility */
+  .text-gradient {
+    background: linear-gradient(135deg, var(--color-primary) 0%, #1a9a88 50%, var(--color-primary) 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+
+  /* Glass morphism */
+  .glass {
+    background: rgba(247, 244, 240, 0.85);
+    backdrop-filter: blur(16px) saturate(1.2);
+    -webkit-backdrop-filter: blur(16px) saturate(1.2);
+  }
+
+  /* Glow shadow */
+  .shadow-glow {
+    box-shadow: 0 0 20px var(--color-primary-glow), 0 4px 16px rgba(0,0,0,0.06);
+  }
+
+  .shadow-glow-hover:hover {
+    box-shadow: 0 0 30px var(--color-primary-glow), 0 8px 24px rgba(0,0,0,0.10);
   }
 }

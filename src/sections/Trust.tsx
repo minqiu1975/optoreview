@@ -2,13 +2,14 @@ import { useRef, useState, useEffect } from 'react';
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import { useGSAP } from '@gsap/react';
+import { BookOpen, Globe, FileCheck, Award } from 'lucide-react';
 
 gsap.registerPlugin(ScrollTrigger);
 
 const stats = [
-  { value: 50, suffix: '+', label: '覆盖顶级光学期刊', sublabel: 'Nature Photonics, Light: Science & Applications, Optica 等' },
-  { value: 10000, suffix: '+', label: '文稿已分析', sublabel: '来自全球 80+ 个国家与地区的研究者' },
-  { value: 3, suffix: '', label: '份结构化报告', sublabel: '评价 · 质疑 · 完善建议，全方位预判' },
+  { value: 50, suffix: '+', label: '覆盖顶级光学期刊', sublabel: 'Nature Photonics, Light: Science & Applications, Optica 等', icon: BookOpen },
+  { value: 10000, suffix: '+', label: '文稿已分析', sublabel: '来自全球 80+ 个国家与地区的研究者', icon: Globe },
+  { value: 3, suffix: '', label: '份结构化报告', sublabel: '评价 · 质疑 · 完善建议，全方位预判', icon: FileCheck },
 ];
 
 function AnimatedNumber({ value, suffix, triggered }: { value: number; suffix: string; triggered: boolean }) {
@@ -36,7 +37,7 @@ function AnimatedNumber({ value, suffix, triggered }: { value: number; suffix: s
     : display.toString();
 
   return (
-    <span className="text-[36px] md:text-[42px] font-bold" style={{ color: 'var(--color-primary)' }}>
+    <span className="text-[36px] md:text-[48px] font-bold tabular-nums tracking-tight" style={{ color: 'var(--color-primary)' }}>
       {formatted}{suffix}
     </span>
   );
@@ -64,7 +65,7 @@ export default function Trust() {
         y: 0,
         opacity: 1,
         duration: 0.5,
-        stagger: 0.1,
+        stagger: 0.12,
         ease: 'expo.out',
         scrollTrigger: {
           trigger: sectionRef.current,
@@ -81,18 +82,39 @@ export default function Trust() {
       className="py-16 md:py-[64px] px-6 md:px-12"
       style={{ background: 'var(--color-bg-panel)' }}
     >
-      <div className="max-w-[1200px] mx-auto grid grid-cols-1 md:grid-cols-3 gap-12">
-        {stats.map((stat) => (
-          <div key={stat.label} className="trust-item text-center">
-            <AnimatedNumber value={stat.value} suffix={stat.suffix} triggered={triggered} />
-            <p className="mt-2 text-[15px] font-medium" style={{ color: 'var(--color-text-secondary)' }}>
-              {stat.label}
-            </p>
-            <p className="mt-1 text-[13px]" style={{ color: 'var(--color-text-muted)' }}>
-              {stat.sublabel}
-            </p>
+      <div className="max-w-[1200px] mx-auto">
+        {/* Section header */}
+        <div className="text-center mb-10">
+          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full mb-3" style={{ background: 'var(--color-primary-light)' }}>
+            <Award size={14} style={{ color: 'var(--color-primary)' }} />
+            <span className="text-[12px] font-semibold tracking-wide" style={{ color: 'var(--color-primary)' }}>TRUSTED BY RESEARCHERS</span>
           </div>
-        ))}
+        </div>
+
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-8 md:gap-12">
+          {stats.map((stat) => {
+            const Icon = stat.icon;
+            return (
+              <div key={stat.label} className="trust-item text-center group">
+                <div className="flex flex-col items-center">
+                  {/* Icon */}
+                  <div className="w-12 h-12 rounded-xl flex items-center justify-center mb-4 transition-all duration-300 group-hover:scale-110"
+                    style={{ background: 'var(--color-primary-light)' }}>
+                    <Icon size={22} style={{ color: 'var(--color-primary)' }} />
+                  </div>
+                  {/* Number */}
+                  <AnimatedNumber value={stat.value} suffix={stat.suffix} triggered={triggered} />
+                  <p className="mt-2 text-[15px] font-medium" style={{ color: 'var(--color-text-secondary)' }}>
+                    {stat.label}
+                  </p>
+                  <p className="mt-1 text-[13px] max-w-[280px] mx-auto" style={{ color: 'var(--color-text-muted)' }}>
+                    {stat.sublabel}
+                  </p>
+                </div>
+              </div>
+            );
+          })}
+        </div>
       </div>
     </section>
   );
