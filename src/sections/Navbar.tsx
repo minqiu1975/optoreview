@@ -1,7 +1,6 @@
 import { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Menu, X, Sparkles } from 'lucide-react';
-import logoImg from '@/assets/logo-icon.png';
 
 const navLinks = [
   { label: '工作流程', href: '#workflow' },
@@ -53,11 +52,20 @@ export default function Navbar() {
             onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
             className="flex items-center gap-2.5 focus:outline-none focus-visible:ring-2 focus-visible:ring-[var(--color-primary)] focus-visible:ring-offset-2 rounded-lg group"
           >
-            <img
-              src={logoImg}
-              alt=""
-              className="w-12 h-12 object-contain rounded-xl transition-all duration-300 group-hover:scale-110 group-hover:shadow-[0_0_20px_rgba(14,107,94,0.2)]"
-            />
+            {/* Logo icon - prism + circuit SVG */}
+            <div className="w-11 h-11 rounded-xl flex items-center justify-center transition-all duration-300 group-hover:scale-110"
+              style={{ background: 'linear-gradient(135deg, #0E6B5E 0%, #1a9a88 100%)' }}>
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
+                <polygon points="12,2 22,8.5 22,15.5 12,22 2,15.5 2,8.5" />
+                <line x1="12" y1="22" x2="12" y2="15.5" />
+                <line x1="22" y1="8.5" x2="12" y2="15.5" />
+                <line x1="2" y1="8.5" x2="12" y2="15.5" />
+                <line x1="7" y1="5.5" x2="7" y2="11.5" />
+                <line x1="17" y1="5.5" x2="17" y2="11.5" />
+                <line x1="7" y1="11.5" x2="12" y2="15.5" />
+                <line x1="17" y1="11.5" x2="12" y2="15.5" />
+              </svg>
+            </div>
             <span className="font-display text-[22px] font-bold transition-colors duration-200" style={{ color: 'var(--color-text-primary)' }}>
               Opto<span style={{ color: 'var(--color-primary)' }}>Review</span>
             </span>
@@ -120,7 +128,15 @@ export default function Navbar() {
             </button>
             {/* Logo in mobile menu */}
             <div className="flex items-center gap-2 mb-4">
-              <img src={logoImg} alt="OptoReview" className="w-10 h-10 object-contain" />
+              <div className="w-10 h-10 rounded-xl flex items-center justify-center"
+                style={{ background: 'linear-gradient(135deg, #0E6B5E 0%, #1a9a88 100%)' }}>
+                <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
+                  <polygon points="12,2 22,8.5 22,15.5 12,22 2,15.5 2,8.5" />
+                  <line x1="12" y1="22" x2="12" y2="15.5" />
+                  <line x1="22" y1="8.5" x2="12" y2="15.5" />
+                  <line x1="2" y1="8.5" x2="12" y2="15.5" />
+                </svg>
+              </div>
               <span className="font-display text-2xl font-bold" style={{ color: 'var(--color-text-primary)' }}>
                 Opto<span style={{ color: 'var(--color-primary)' }}>Review</span>
               </span>
