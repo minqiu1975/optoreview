@@ -1,0 +1,265 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    /* Design Tokens - OptoReview */
+    --color-bg-base: #F7F4F0;
+    --color-bg-panel: #FFFFFF;
+    --color-bg-input: #FAF8F5;
+    --color-primary: #0E6B5E;
+    --color-primary-hover: #0A5248;
+    --color-primary-light: #E8F3F1;
+    --color-text-primary: #1A1A1A;
+    --color-text-secondary: #5C5C5C;
+    --color-text-muted: #9E9E9E;
+    --color-border: #E0DDD8;
+    --color-border-light: #EEEBE6;
+    --color-amber: #C8963E;
+    --color-brown: #8B5E34;
+    --color-blue: #2E5A8C;
+    --color-error: #B84949;
+
+    /* Fonts */
+    --font-sans: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+    --font-mono: 'JetBrains Mono', 'Fira Code', 'SF Mono', monospace;
+    --font-display: 'Playfair Display', 'Georgia', serif;
+
+    /* Easings */
+    --ease-out-expo: cubic-bezier(0.16, 1, 0.3, 1);
+    --ease-in-out-cubic: cubic-bezier(0.65, 0, 0.35, 1);
+    --ease-spring: cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    --ease-smooth: cubic-bezier(0.4, 0, 0.2, 1);
+
+    /* shadcn overrides */
+    --background: 30 20% 96%;
+    --foreground: 0 0% 10%;
+    --card: 0 0% 100%;
+    --card-foreground: 0 0% 10%;
+    --popover: 0 0% 100%;
+    --popover-foreground: 0 0% 10%;
+    --primary: 168 77% 24%;
+    --primary-foreground: 0 0% 100%;
+    --secondary: 30 12% 96%;
+    --secondary-foreground: 0 0% 10%;
+    --muted: 30 12% 96%;
+    --muted-foreground: 0 0% 36%;
+    --accent: 168 77% 24%;
+    --accent-foreground: 0 0% 100%;
+    --destructive: 0 54% 50%;
+    --destructive-foreground: 0 0% 98%;
+    --border: 30 8% 86%;
+    --input: 30 8% 86%;
+    --ring: 168 77% 24%;
+    --radius: 0.625rem;
+
+    --sidebar-background: 30 20% 96%;
+    --sidebar-foreground: 0 0% 10%;
+    --sidebar-primary: 168 77% 24%;
+    --sidebar-primary-foreground: 0 0% 100%;
+    --sidebar-accent: 168 77% 24%;
+    --sidebar-accent-foreground: 0 0% 100%;
+    --sidebar-border: 30 8% 86%;
+    --sidebar-ring: 168 77% 24%;
+  }
+
+  * {
+    @apply border-border;
+  }
+
+  html {
+    scroll-behavior: smooth;
+  }
+
+  body {
+    font-family: var(--font-sans);
+    background-color: var(--color-bg-base);
+    color: var(--color-text-primary);
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+}
+
+@layer components {
+  /* Markdown report styles */
+  .markdown-report {
+    font-size: 15px;
+    line-height: 1.8;
+    color: var(--color-text-primary);
+  }
+
+  .markdown-report h1 {
+    font-family: var(--font-sans);
+    font-size: 22px;
+    font-weight: 700;
+    color: var(--color-primary);
+    margin-bottom: 16px;
+    padding-bottom: 8px;
+    border-bottom: 2px solid var(--color-primary);
+  }
+
+  .markdown-report h2 {
+    font-family: var(--font-sans);
+    font-size: 18px;
+    font-weight: 600;
+    color: var(--color-text-primary);
+    margin-top: 24px;
+    margin-bottom: 12px;
+  }
+
+  .markdown-report h3 {
+    font-family: var(--font-sans);
+    font-size: 16px;
+    font-weight: 600;
+    color: var(--color-text-secondary);
+    margin-top: 16px;
+    margin-bottom: 8px;
+  }
+
+  .markdown-report p {
+    margin-bottom: 12px;
+  }
+
+  .markdown-report strong {
+    font-weight: 600;
+    color: var(--color-text-primary);
+  }
+
+  .markdown-report blockquote {
+    border-left: 3px solid var(--color-primary);
+    background: var(--color-primary-light);
+    padding: 12px 16px;
+    border-radius: 0 8px 8px 0;
+    font-style: italic;
+    margin-bottom: 16px;
+  }
+
+  .markdown-report blockquote.brown {
+    border-left-color: var(--color-brown);
+    background: #F9F4EF;
+  }
+
+  .markdown-report blockquote.blue {
+    border-left-color: var(--color-blue);
+    background: #F0F3F7;
+  }
+
+  .markdown-report ol {
+    list-style: none;
+    counter-reset: item;
+    padding-left: 0;
+  }
+
+  .markdown-report ol > li {
+    counter-increment: item;
+    margin-bottom: 12px;
+    padding-left: 32px;
+    position: relative;
+  }
+
+  .markdown-report ol > li::before {
+    content: counter(item);
+    position: absolute;
+    left: 0;
+    top: 2px;
+    background: var(--color-primary-light);
+    color: var(--color-primary);
+    font-size: 12px;
+    font-weight: 600;
+    padding: 2px 8px;
+    border-radius: 4px;
+  }
+
+  .markdown-report ul {
+    list-style: none;
+    padding-left: 0;
+    margin-bottom: 12px;
+  }
+
+  .markdown-report ul > li {
+    padding-left: 20px;
+    position: relative;
+    margin-bottom: 10px;
+  }
+
+  .markdown-report ul > li::before {
+    content: "\2022";
+    position: absolute;
+    left: 0;
+    color: var(--color-primary);
+    font-size: 10px;
+    line-height: 1.8;
+  }
+
+  .markdown-report code {
+    font-family: var(--font-mono);
+    font-size: 13px;
+    background: #F0EDE8;
+    padding: 2px 6px;
+    border-radius: 4px;
+    color: var(--color-brown);
+  }
+
+  .markdown-report pre {
+    background: #1E1E1E;
+    padding: 16px;
+    border-radius: 8px;
+    overflow-x: auto;
+    margin-bottom: 16px;
+  }
+
+  .markdown-report pre code {
+    background: transparent;
+    color: #f0f0f0;
+    padding: 0;
+  }
+
+  .markdown-report a {
+    color: var(--color-primary);
+    text-decoration: none;
+  }
+
+  .markdown-report a:hover {
+    text-decoration: underline;
+  }
+
+  .markdown-report table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-bottom: 16px;
+    border-radius: 8px;
+    overflow: hidden;
+  }
+
+  .markdown-report th {
+    background: var(--color-primary-light);
+    font-size: 14px;
+    font-weight: 600;
+    padding: 12px 16px;
+    text-align: left;
+  }
+
+  .markdown-report td {
+    font-size: 14px;
+    padding: 12px 16px;
+    border-bottom: 1px solid var(--color-border-light);
+  }
+
+  .markdown-report tr:nth-child(even) {
+    background: var(--color-bg-input);
+  }
+
+  .markdown-report hr {
+    border: none;
+    border-top: 1px solid var(--color-border);
+    margin: 24px 0;
+  }
+
+  /* Skeleton shimmer */
+  .skeleton-shimmer {
+    background: linear-gradient(90deg, #f0f0f0 25%, #e0e0e0 50%, #f0f0f0 75%);
+    background-size: 200% 100%;
+    animation: shimmer 1.5s ease-in-out infinite;
+  }
+}
