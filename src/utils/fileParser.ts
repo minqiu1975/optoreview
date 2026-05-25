@@ -587,3 +587,22 @@ export function analyzeContent(parsed: ParsedDocument): ContentAnalysis {
   const methods: string[] = [];
   for (const [method, keywords] of Object.entries(methodMap)) {
     if (keywords.some(k => text.includes(k))) method
+      }
+
+  const methods: string[] = [];
+  for (const [method, keywords] of Object.entries(methodMap)) {
+    if (keywords.some(k => text.includes(k))) methods.push(method);
+  }
+
+  return {
+    topic: detectedFields[0] || '光学与光子学',
+    methods,
+    hasExperiment: methods.includes('实验研究'),
+    hasTheory: methods.includes('理论建模'),
+    hasSimulation: methods.includes('数值模拟'),
+    fieldKeywords: detectedFields,
+    estimatedTier: parsed.abstract.length > 500 && detectedFields.length >= 2 ? 'Nature/Science 子刊' :
+      parsed.abstract.length > 300 && detectedFields.length >= 2 ? '本领域顶刊 / 大子刊' :
+      '本领域核心期刊',
+  };
+}
