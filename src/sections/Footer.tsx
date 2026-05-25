@@ -3,6 +3,7 @@ import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import { useGSAP } from '@gsap/react';
 import { Heart, ExternalLink } from 'lucide-react';
+import logoImg from '@/assets/logo.png';
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -56,7 +57,7 @@ export default function Footer() {
           {/* Column 1 - Logo */}
           <div className="footer-item">
             <div className="flex items-center gap-2.5">
-              <img src="./images/logo.png" alt="OptoReview" className="w-8 h-8 object-contain" />
+              <img src={logoImg} alt="OptoReview" className="w-8 h-8 object-contain" />
               <span className="font-display text-xl font-bold text-white">
                 Opto<span className="text-[#5BC9B8]">Review</span>
               </span>
