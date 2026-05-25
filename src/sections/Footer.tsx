@@ -3,7 +3,7 @@ import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import { useGSAP } from '@gsap/react';
 import { Heart, ExternalLink } from 'lucide-react';
-import logoImg from '@/assets/logo.png';
+import logoImg from '@/assets/logo-icon.png';
 
 gsap.registerPlugin(ScrollTrigger);
 
