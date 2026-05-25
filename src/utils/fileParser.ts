@@ -586,11 +586,6 @@ export function analyzeContent(parsed: ParsedDocument): ContentAnalysis {
 
   const methods: string[] = [];
   for (const [method, keywords] of Object.entries(methodMap)) {
-    if (keywords.some(k => text.includes(k))) method
-      }
-
-  const methods: string[] = [];
-  for (const [method, keywords] of Object.entries(methodMap)) {
     if (keywords.some(k => text.includes(k))) methods.push(method);
   }
 
