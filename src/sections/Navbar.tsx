@@ -53,15 +53,15 @@ export default function Navbar() {
             className="flex items-center gap-2.5 focus:outline-none focus-visible:ring-2 focus-visible:ring-[var(--color-primary)] focus-visible:ring-offset-2 rounded-lg group"
           >
             {/* Logo image */}
-            <div className="relative w-8 h-8 flex items-center justify-center transition-transform duration-300 group-hover:scale-110">
+            <div className="relative w-10 h-10 flex items-center justify-center transition-transform duration-300 group-hover:scale-110">
               <img
                 src="./images/logo.png"
                 alt="OptoReview"
-                className="w-8 h-8 object-contain"
+                className="w-10 h-10 object-contain"
               />
               {/* Subtle glow on hover */}
               <div className="absolute inset-0 rounded-full opacity-0 group-hover:opacity-100 transition-opacity duration-300"
-                style={{ boxShadow: '0 0 12px rgba(14,107,94,0.25)' }}
+                style={{ boxShadow: '0 0 16px rgba(14,107,94,0.25)' }}
               />
             </div>
             <span className="font-display text-[22px] font-bold transition-colors duration-200" style={{ color: 'var(--color-text-primary)' }}>
