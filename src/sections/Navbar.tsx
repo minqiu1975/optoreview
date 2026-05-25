@@ -53,18 +53,11 @@ export default function Navbar() {
             onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
             className="flex items-center gap-2.5 focus:outline-none focus-visible:ring-2 focus-visible:ring-[var(--color-primary)] focus-visible:ring-offset-2 rounded-lg group"
           >
-            {/* Logo image */}
-            <div className="relative w-10 h-10 flex items-center justify-center transition-transform duration-300 group-hover:scale-110">
-              <img
-                src={logoImg}
-                alt="OptoReview"
-                className="w-10 h-10 object-contain"
-              />
-              {/* Subtle glow on hover */}
-              <div className="absolute inset-0 rounded-full opacity-0 group-hover:opacity-100 transition-opacity duration-300"
-                style={{ boxShadow: '0 0 16px rgba(14,107,94,0.25)' }}
-              />
-            </div>
+            <img
+              src={logoImg}
+              alt=""
+              className="w-12 h-12 object-contain rounded-xl transition-all duration-300 group-hover:scale-110 group-hover:shadow-[0_0_20px_rgba(14,107,94,0.2)]"
+            />
             <span className="font-display text-[22px] font-bold transition-colors duration-200" style={{ color: 'var(--color-text-primary)' }}>
               Opto<span style={{ color: 'var(--color-primary)' }}>Review</span>
             </span>
