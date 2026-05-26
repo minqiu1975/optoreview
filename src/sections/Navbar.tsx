@@ -1,14 +1,18 @@
 import { useState, useEffect } from 'react';
+import { useNavigate, useLocation } from 'react-router';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Menu, X, Sparkles } from 'lucide-react';
 
 const navLinks = [
-  { label: '工作流程', href: '#workflow' },
-  { label: '报告预览', href: '#reports' },
-  { label: '常见问题', href: '#faq' },
+  { label: '首页', path: '/' },
+  { label: '工作流程', path: '/workflow' },
+  { label: '报告预览', path: '/reports' },
+  { label: '常见问题', path: '/faq' },
 ];
 
 export default function Navbar() {
+  const navigate = useNavigate();
+  const location = useLocation();
   const [scrolled, setScrolled] = useState(false);
   const [mobileOpen, setMobileOpen] = useState(false);
 
@@ -18,17 +22,17 @@ export default function Navbar() {
     return () => window.removeEventListener('scroll', onScroll);
   }, []);
 
-  const scrollTo = (href: string) => {
+  // Close mobile menu on route change
+  useEffect(() => {
     setMobileOpen(false);
-    const el = document.querySelector(href);
-    if (el) el.scrollIntoView({ behavior: 'smooth' });
+  }, [location.pathname]);
+
+  const goTo = (path: string) => {
+    setMobileOpen(false);
+    navigate(path);
   };
 
-  const scrollToApp = () => {
-    setMobileOpen(false);
-    const el = document.querySelector('#app-section');
-    if (el) el.scrollIntoView({ behavior: 'smooth' });
-  };
+  const isActive = (path: string) => location.pathname === path;
 
   return (
     <>
@@ -49,7 +53,7 @@ export default function Navbar() {
         <div className="max-w-[1440px] mx-auto h-full flex items-center justify-between px-6 md:px-12">
           {/* Logo */}
           <button
-            onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
+            onClick={() => goTo('/')}
             className="flex items-center gap-2.5 focus:outline-none focus-visible:ring-2 focus-visible:ring-[var(--color-primary)] focus-visible:ring-offset-2 rounded-lg group"
           >
             {/* Logo icon - prism + circuit SVG */}
@@ -72,23 +76,37 @@ export default function Navbar() {
           </button>
 
           {/* Desktop nav links */}
-          <div className="hidden md:flex items-center gap-8">
+          <div className="hidden md:flex items-center gap-1">
             {navLinks.map((link) => (
               <button
-                key={link.href}
-                onClick={() => scrollTo(link.href)}
-                className="relative text-[15px] font-medium transition-colors duration-200 focus:outline-none group"
-                style={{ color: 'var(--color-text-secondary)' }}
-                onMouseEnter={(e) => { (e.target as HTMLElement).style.color = 'var(--color-primary)'; }}
-                onMouseLeave={(e) => { (e.target as HTMLElement).style.color = 'var(--color-text-secondary)'; }}
+                key={link.path}
+                onClick={() => goTo(link.path)}
+                className="relative px-3 py-2 text-[15px] font-medium transition-colors duration-200 focus:outline-none rounded-lg"
+                style={{
+                  color: isActive(link.path) ? 'var(--color-primary)' : 'var(--color-text-secondary)',
+                  background: isActive(link.path) ? 'var(--color-primary-light)' : 'transparent',
+                }}
+                onMouseEnter={(e) => {
+                  if (!isActive(link.path)) (e.target as HTMLElement).style.color = 'var(--color-primary)';
+                }}
+                onMouseLeave={(e) => {
+                  if (!isActive(link.path)) (e.target as HTMLElement).style.color = 'var(--color-text-secondary)';
+                }}
               >
                 {link.label}
-                <span className="absolute -bottom-1 left-0 w-0 h-0.5 bg-[var(--color-primary)] transition-all duration-300 ease-out group-hover:w-full rounded-full" />
+                {isActive(link.path) && (
+                  <motion.span
+                    layoutId="nav-indicator"
+                    className="absolute bottom-0 left-3 right-3 h-0.5 rounded-full"
+                    style={{ background: 'var(--color-primary)' }}
+                    transition={{ duration: 0.3, ease: [0.16, 1, 0.3, 1] as [number, number, number, number] }}
+                  />
+                )}
               </button>
             ))}
             <button
-              onClick={scrollToApp}
-              className="btn-premium flex items-center gap-1.5 text-sm font-medium text-white px-5 py-2.5 rounded-lg transition-all duration-300 hover:-translate-y-0.5 focus:outline-none focus-visible:ring-2 focus-visible:ring-[var(--color-primary)] focus-visible:ring-offset-2"
+              onClick={() => goTo('/analyze')}
+              className="btn-premium flex items-center gap-1.5 text-sm font-medium text-white px-5 py-2.5 rounded-lg transition-all duration-300 hover:-translate-y-0.5 focus:outline-none focus-visible:ring-2 focus-visible:ring-[var(--color-primary)] focus-visible:ring-offset-2 ml-4"
             >
               <Sparkles size={14} />
               开始分析
@@ -115,7 +133,7 @@ export default function Navbar() {
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
             transition={{ duration: 0.3 }}
-            className="fixed inset-0 z-[60] flex flex-col items-center justify-center gap-8"
+            className="fixed inset-0 z-[60] flex flex-col items-center justify-center gap-6"
             style={{ background: 'rgba(247, 244, 240, 0.98)', backdropFilter: 'blur(24px)' }}
           >
             <button
@@ -143,14 +161,17 @@ export default function Navbar() {
             </div>
             {navLinks.map((link, i) => (
               <motion.button
-                key={link.href}
+                key={link.path}
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
                 exit={{ opacity: 0, y: 20 }}
                 transition={{ delay: i * 0.08, duration: 0.3 }}
-                onClick={() => scrollTo(link.href)}
-                className="text-[28px] font-medium focus:outline-none transition-colors duration-200"
-                style={{ color: 'var(--color-text-primary)' }}
+                onClick={() => goTo(link.path)}
+                className="text-[24px] font-medium focus:outline-none transition-colors duration-200 px-6 py-2 rounded-xl"
+                style={{
+                  color: isActive(link.path) ? 'var(--color-primary)' : 'var(--color-text-primary)',
+                  background: isActive(link.path) ? 'var(--color-primary-light)' : 'transparent',
+                }}
               >
                 {link.label}
               </motion.button>
@@ -159,9 +180,9 @@ export default function Navbar() {
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               exit={{ opacity: 0, y: 20 }}
-              transition={{ delay: 0.24, duration: 0.3 }}
-              onClick={scrollToApp}
-              className="btn-premium text-[20px] font-medium px-8 py-3.5 rounded-lg text-white focus:outline-none flex items-center gap-2"
+              transition={{ delay: 0.32, duration: 0.3 }}
+              onClick={() => goTo('/analyze')}
+              className="btn-premium text-[18px] font-medium px-8 py-3 rounded-lg text-white focus:outline-none flex items-center gap-2 mt-2"
             >
               <Sparkles size={18} />
               开始分析
