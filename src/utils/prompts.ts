@@ -143,12 +143,16 @@ const JOURNAL_RECOMMENDATION_RULES = `
 5. **冲稳建议**：如果论文适合多个层级，给出冲一冲（高目标）和保一保（稳妥目标）的建议
 6. **不推荐说明**：如果论文不适合投"顶级综合刊"或"Nature大子刊"，请明确说明为什么不推荐，具体指出论文与这些顶刊的差距在哪里（例如：创新性不足、影响范围有限、实验数据不够充分等）`;
 
+/* Current date for report dating */
+const currentDate = new Date().toLocaleDateString('zh-CN', { year: 'numeric', month: '2-digit', day: '2-digit' }).replace(/\//g, '-');
+const currentYear = new Date().getFullYear();
+
 /**
  * Build evaluation report prompt
  */
 export function buildEvaluationPrompt(paperExtract: string): PromptPair {
   const system = SYSTEM_ROLE_PROMPT;
-  const user = `请基于以下论文提取内容撰写一份详细的「评价报告」。
+  const user = `请基于以下论文提取内容撰写一份详细的「评价报告」。报告中的评审日期必须使用实际日期：${currentDate}（${currentYear}年），不要写2025年或其他年份。
 
 ## 论文内容
 
@@ -180,7 +184,7 @@ ${paperExtract}
  */
 export function buildCritiquePrompt(paperExtract: string): PromptPair {
   const system = SYSTEM_ROLE_PROMPT;
-  const user = `请基于以下论文提取内容撰写一份详细的「质疑报告」，模拟顶刊审稿人的视角提出关键问题。
+  const user = `请基于以下论文提取内容撰写一份详细的「质疑报告」，模拟顶刊审稿人的视角提出关键问题。报告中的评审日期必须使用实际日期：${currentDate}（${currentYear}年），不要写2025年或其他年份。
 
 ## 论文内容
 
@@ -215,7 +219,7 @@ export function buildImprovementPrompt(
   critiqueReport: string
 ): PromptPair {
   const system = SYSTEM_ROLE_PROMPT;
-  const user = `请基于以下论文内容和质疑报告，撰写一份详细的「完善建议」。
+  const user = `请基于以下论文内容和质疑报告，撰写一份详细的「完善建议」。报告中的日期必须使用实际日期：${currentDate}（${currentYear}年），不要写2025年或其他年份。
 
 ## 论文内容
 
