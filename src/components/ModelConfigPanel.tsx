@@ -38,6 +38,7 @@ import {
   getProviderConfig,
   validateApiKey,
   streamChat,
+  getModelCostEstimate,
 } from '@/utils/llmAdapter';
 
 /* ------------------------------------------------------------------ */
@@ -86,7 +87,7 @@ const PROVIDERS: {
     icon: '🌙',
     label: 'Kimi',
     tag: 'K2.6 · 1T参数MoE · 256K上下文',
-    costTag: '~¥0.3/次',
+    costTag: '~¥0.9/次',
     color: '#4F6EF7',
     bgColor: '#F0F2FF',
     borderColor: '#4F6EF7',
@@ -96,7 +97,7 @@ const PROVIDERS: {
     icon: '🔥',
     label: 'DeepSeek',
     tag: 'V3 · 671B参数 · 性价比之王',
-    costTag: '~¥0.01/次',
+    costTag: '~¥0.3/次',
     color: '#4F6EF7',
     bgColor: '#F0F2FF',
     borderColor: '#4F6EF7',
@@ -106,7 +107,7 @@ const PROVIDERS: {
     icon: '◆',
     label: 'Claude',
     tag: 'Sonnet 4.5 · 200K上下文 · 编码最强',
-    costTag: '~$0.15/次',
+    costTag: '~$0.15/次 (≈¥1.1)',
     color: '#D4A27F',
     bgColor: '#FDF6EE',
     borderColor: '#D4A27F',
@@ -116,7 +117,7 @@ const PROVIDERS: {
     icon: '◉',
     label: 'OpenAI',
     tag: 'GPT-4.1 · 1M上下文 · 多模态',
-    costTag: '~$0.08/次',
+    costTag: '~$0.10/次 (≈¥0.7)',
     color: '#10A37F',
     bgColor: '#E6F7F3',
     borderColor: '#10A37F',
@@ -215,6 +216,7 @@ export default function ModelConfigPanel({ config, onChange, disabled = false }:
 
   const modelOptions = getModelOptions(provider);
   const providerConfig = getProviderConfig(provider);
+  const dynamicCost = getModelCostEstimate(model);
 
   // Sync local state when config prop changes externally
   useEffect(() => {
@@ -433,8 +435,20 @@ export default function ModelConfigPanel({ config, onChange, disabled = false }:
             </div>
           ))}
         </div>
+        {/* Dynamic cost for selected model */}
+        {dynamicCost && (
+          <div className="mt-2 flex items-center gap-2 px-2 py-1.5 rounded-lg" style={{ background: 'rgba(14,107,94,0.06)' }}>
+            <span className="text-[11px] font-medium" style={{ color: 'var(--color-primary)' }}>
+              当前模型: {model}
+            </span>
+            <span className="text-[11px]" style={{ color: 'var(--color-text-muted)' }}>|</span>
+            <span className="text-[11px] font-semibold" style={{ color: 'var(--color-primary)' }}>
+              预估 {dynamicCost}
+            </span>
+          </div>
+        )}
         <p className="mt-2 text-[10px]" style={{ color: 'var(--color-text-muted)' }}>
-          Gemini Flash 模型对普通用户完全免费，无需绑定信用卡。预审 3 份报告仅需约 ¥0.01-0.3 元（DeepSeek/Kimi）。
+          费用基于各平台官方定价计算，实际消费可能因缓存命中率、网络延迟、平台计费策略等因素略有差异。Gemini Flash 免费额度内无需付费。
         </p>
       </div>
 

@@ -4,6 +4,123 @@
 
 export type ModelProvider = 'kimi' | 'gemini' | 'claude' | 'deepseek' | 'openai';
 
+/* ---------- Pricing config (CNY per 1M tokens, China domestic) ---------- */
+
+interface ModelPricing {
+  input: number;       // ¥ per 1M input tokens (cache-miss)
+  inputCached: number; // ¥ per 1M cached input tokens
+  output: number;      // ¥ per 1M output tokens
+  currency: 'CNY' | 'USD';
+}
+
+// Verified pricing as of 2026-05-30
+// Sources: platform.moonshot.cn, platform.deepseek.com, etc.
+const MODEL_PRICING: Record<string, ModelPricing> = {
+  // Kimi — moonshot.cn domestic pricing
+  'kimi-k2.6':   { input: 6.50,  inputCached: 1.10, output: 27.00, currency: 'CNY' },
+  'kimi-k2.5':   { input: 4.00,  inputCached: 0.70, output: 16.00, currency: 'CNY' },
+  // DeepSeek — platform.deepseek.com
+  'deepseek-chat':     { input: 2.00, inputCached: 0.50, output: 8.00, currency: 'CNY' },
+  'deepseek-reasoner': { input: 4.00, inputCached: 1.00, output: 16.00, currency: 'CNY' },
+  // OpenAI — USD pricing
+  'gpt-4.1':      { input: 2.00,  inputCached: 0.50, output: 8.00,  currency: 'USD' },
+  'gpt-4.1-mini': { input: 0.40,  inputCached: 0.10, output: 1.60,  currency: 'USD' },
+  'o4-mini':      { input: 1.10,  inputCached: 0.275, output: 4.40, currency: 'USD' },
+  // Claude — USD pricing
+  'claude-sonnet-4-5': { input: 3.00, inputCached: 0.30, output: 15.00, currency: 'USD' },
+  'claude-opus-4-1':   { input: 15.00, inputCached: 1.50, output: 75.00, currency: 'USD' },
+  'claude-haiku-4-5':  { input: 1.00, inputCached: 0.10, output: 5.00,  currency: 'USD' },
+  // Gemini — free tier
+  'gemini-2.5-pro-exp-03-25': { input: 0, inputCached: 0, output: 0, currency: 'CNY' },
+  'gemini-2.5-flash':         { input: 0, inputCached: 0, output: 0, currency: 'CNY' },
+  'gemini-2.0-flash':         { input: 0, inputCached: 0, output: 0, currency: 'CNY' },
+};
+
+const USD_TO_CNY = 7.25; // Approximate exchange rate 2026-05
+
+/**
+ * Calculate estimated cost in CNY for a given model and token usage.
+ * Costs are approximate — actual billing may differ due to:
+ * - Cache hit/miss ratios (we assume 0% cache hit for worst-case)
+ * - Platform-specific rounding or minimum charges
+ * - Network/request surcharges on some platforms
+ */
+export function calculateCost(
+  model: string,
+  inputTokens: number,
+  outputTokens: number,
+  cachedTokens: number = 0
+): { cny: number; usd: number; breakdown: string } {
+  const pricing = MODEL_PRICING[model];
+  if (!pricing) {
+    return { cny: 0, usd: 0, breakdown: '未知模型定价' };
+  }
+
+  if (pricing.currency === 'CNY' && pricing.input === 0) {
+    return { cny: 0, usd: 0, breakdown: '免费' };
+  }
+
+  const missTokens = Math.max(0, inputTokens - cachedTokens);
+  const hitTokens = Math.min(cachedTokens, inputTokens);
+
+  let costCny = 0;
+  let costUsd = 0;
+
+  if (pricing.currency === 'CNY') {
+    costCny = (missTokens / 1_000_000) * pricing.input +
+              (hitTokens / 1_000_000) * pricing.inputCached +
+              (outputTokens / 1_000_000) * pricing.output;
+    costUsd = costCny / USD_TO_CNY;
+  } else {
+    costUsd = (missTokens / 1_000_000) * pricing.input +
+              (hitTokens / 1_000_000) * pricing.inputCached +
+              (outputTokens / 1_000_000) * pricing.output;
+    costCny = costUsd * USD_TO_CNY;
+  }
+
+  const missCost = (missTokens / 1_000_000) * pricing.input;
+  const hitCost = (hitTokens / 1_000_000) * pricing.inputCached;
+  const outCost = (outputTokens / 1_000_000) * pricing.output;
+
+  const parts: string[] = [];
+  if (missTokens > 0) parts.push(`输入${missTokens >= 1000 ? (missTokens/1000).toFixed(1)+'K' : missTokens} ¥${missCost.toFixed(3)}`);
+  if (hitTokens > 0) parts.push(`缓存${hitTokens >= 1000 ? (hitTokens/1000).toFixed(1)+'K' : hitTokens} ¥${hitCost.toFixed(3)}`);
+  if (outputTokens > 0) parts.push(`输出${outputTokens >= 1000 ? (outputTokens/1000).toFixed(1)+'K' : outputTokens} ¥${outCost.toFixed(3)}`);
+
+  return {
+    cny: costCny,
+    usd: costUsd,
+    breakdown: parts.join(' + ') || '无',
+  };
+}
+
+/**
+ * Get pricing display for a model (for UI cost tags).
+ * Returns a human-readable cost estimate string.
+ */
+export function getModelCostEstimate(model: string): string {
+  const pricing = MODEL_PRICING[model];
+  if (!pricing) return '';
+
+  if (pricing.currency === 'CNY' && pricing.input === 0) {
+    return '免费';
+  }
+
+  // Estimate for a typical review: ~12K input, ~2K output, 0% cache
+  const { cny, usd } = calculateCost(model, 12000, 2000);
+
+  if (pricing.currency === 'CNY') {
+    // Show range: typical to worst-case (longer papers)
+    const { cny: maxCny } = calculateCost(model, 50000, 8000);
+    if (maxCny > cny * 1.5) {
+      return `~¥${cny.toFixed(1)}-${maxCny.toFixed(0)}/次`;
+    }
+    return `~¥${cny.toFixed(1)}/次`;
+  } else {
+    return `~$${usd.toFixed(2)}/次`;
+  }
+}
+
 export interface ChatMessage {
   role: 'system' | 'user' | 'assistant';
   content: string;
