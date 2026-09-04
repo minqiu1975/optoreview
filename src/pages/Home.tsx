@@ -80,7 +80,7 @@ export default function Home() {
       <Hero />
 
       {/* Page Navigation Cards */}
-      <section ref={cardsRef} className="py-20 md:py-[80px] px-6 md:px-12" style={{ background: 'var(--color-bg-panel)' }}>
+      <section id="explore" ref={cardsRef} className="py-20 md:py-[80px] px-6 md:px-12" style={{ background: 'var(--color-bg-panel)' }}>
         <div className="max-w-[1200px] mx-auto">
           {/* Section header */}
           <div className="text-center mb-14">

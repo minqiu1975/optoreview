@@ -1,4 +1,5 @@
 import { useEffect, useRef } from 'react';
+import { useNavigate } from 'react-router';
 import { motion } from 'framer-motion';
 import { FileUp, ListOrdered, ChevronDown, ArrowRight, Sparkles } from 'lucide-react';
 import gsap from 'gsap';
@@ -116,6 +117,8 @@ export default function Hero() {
     const cleanup = initParticles(canvasRef.current);
     return cleanup;
   }, []);
+
+  const navigate = useNavigate();
 
   const scrollTo = (id: string) => {
     const el = document.querySelector(id);
@@ -244,7 +247,7 @@ export default function Hero() {
           className="flex flex-col sm:flex-row items-center gap-4 mt-9"
         >
           <button
-            onClick={() => scrollTo('#app-section')}
+            onClick={() => navigate('/analyze')}
             className="btn-premium flex items-center gap-2 text-base font-medium text-white px-7 py-3 rounded-lg transition-transform duration-300 hover:-translate-y-0.5 focus:outline-none focus-visible:ring-2 focus-visible:ring-offset-2"
             style={{ borderRadius: '12px' }}
           >
@@ -253,7 +256,7 @@ export default function Hero() {
             <ArrowRight size={18} />
           </button>
           <button
-            onClick={() => scrollTo('#workflow')}
+            onClick={() => navigate('/workflow')}
             className="flex items-center gap-2 text-base font-medium px-6 py-3 rounded-xl border transition-all duration-300 hover:-translate-y-0.5 focus:outline-none focus-visible:ring-2 focus-visible:ring-offset-2"
             style={{
               color: 'var(--color-text-primary)',
@@ -284,7 +287,7 @@ export default function Hero() {
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         transition={{ delay: 2, duration: 0.5 }}
-        onClick={() => scrollTo('#workflow')}
+        onClick={() => scrollTo('#explore')}
         className="absolute bottom-8 left-1/2 -translate-x-1/2 z-10 animate-scroll-chevron focus:outline-none p-2 rounded-full transition-colors duration-200 hover:bg-[var(--color-primary-light)]"
         style={{ color: 'var(--color-text-muted)' }}
         aria-label="Scroll down"
